@@ -9,13 +9,13 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class RegistrationFormType extends AbstractType
+class WarehouseAddFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->setMethod('POST')
-            ->add('username', TextType::class)
+            ->add('name', TextType::class)
             ->add('password', PasswordType::class)
             ->add('roles', ChoiceType::class, [
                 'choices' => [
