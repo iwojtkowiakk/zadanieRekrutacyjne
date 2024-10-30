@@ -21,6 +21,7 @@ class AdminController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $user = new User();
+
             $user->setUsername($form->get('username')->getData());
 
             $plaintextPassword = $form->get('password')->getData();
@@ -30,7 +31,7 @@ class AdminController extends AbstractController
             );
 
             $user->setPassword($hashedPassword);
-            $user->setRoles([$form->get('roles')->getData()]);
+//            $user->setRoles([$form->get('roles')->getData()]);
 
             $entityManager->persist($user);
             $entityManager->flush();

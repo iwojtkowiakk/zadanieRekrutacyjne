@@ -2,8 +2,9 @@
 
 namespace App\Form;
 
+use App\Entity\Warehouse;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -17,13 +18,18 @@ class RegistrationFormType extends AbstractType
             ->setMethod('POST')
             ->add('username', TextType::class)
             ->add('password', PasswordType::class)
-            ->add('roles', ChoiceType::class, [
-                'choices' => [
-                    'User' => 'ROLE_USER',
-                    'Admin' => 'ROLE_ADMIN',
-                ]
+//            ->add('roles', ChoiceType::class, [
+//                'choices' => [
+//                    'User' => 'ROLE_USER',
+//                    'Admin' => 'ROLE_ADMIN',
+//                ]
+//            ])
+            ->add('warehouses', EntityType::class, [
+                'class' => Warehouse::class,
+                'choice_label' => 'name',
+                'multiple' => true,
+                'expanded' => true,
             ])
-            ->add('save', SubmitType::class)
-        ;
+            ->add('save', SubmitType::class);
     }
 }

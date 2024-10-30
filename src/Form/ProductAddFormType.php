@@ -9,19 +9,14 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class WarehouseAddFormType extends AbstractType
+class ProductAddFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->setMethod('POST')
             ->add('name', TextType::class)
-            ->add('users', EntityType::class, [
-                'class' => User::class,
-                'choice_label' => 'username',
-                'multiple' => true,
-                'expanded' => true,
-            ])
+            ->add('unit', TextType::class)
             ->add('save', SubmitType::class);
     }
 }

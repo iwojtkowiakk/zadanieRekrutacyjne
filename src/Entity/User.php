@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -31,6 +33,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column]
     private ?string $password = null;
+
+    /**
+     * @var Collection<int, Warehouse>
+     */
+    #[ORM\ManyToMany(targetEntity: Warehouse::class, inversedBy: 'users')]
+    private Collection $warehouses;
+
+    public function __construct()
+    {
+        $this->warehouses = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -105,5 +118,29 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    /**
+     * @return Collection<int, Warehouse>
+     */
+    public function getWarehouses(): Collection
+    {
+        return $this->warehouses;
+    }
+
+    public function addWarehouse(Warehouse $warehouse): static
+    {
+        if (!$this->warehouses->contains($warehouse)) {
+            $this->warehouses->add($warehouse);
+        }
+
+        return $this;
+    }
+
+    public function removeWarehouse(Warehouse $warehouse): static
+    {
+        $this->warehouses->removeElement($warehouse);
+
+        return $this;
     }
 }

@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1 class="h3 mb-3 font-weight-normal">Przejdź do magazynu:</h1>
+
+    <ul>
+        {% for warehouse in warehouses %}
+            <li>
+                <a href="{{ path('warehouse_list',{'id': warehouse.id}) }}">{{ warehouse.name }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
