@@ -2,12 +2,10 @@
 
 {% block body %}
     <h1 class="h3 mb-3 font-weight-normal">Przejdź do magazynu:</h1>
-
-    <ul>
+    <ul class="list-group">
         {% for warehouse in warehouses %}
-            <li>
-                <a href="{{ path('warehouse_list',{'id': warehouse.id}) }}">{{ warehouse.name }}</a>
-            </li>
+            <a href="{{ path('warehouse_list',{'id': warehouse.id}) }}"
+               class="list-group-item list-group-item-action">{{ warehouse.name }}</a>
         {% endfor %}
     </ul>
 {% endblock %}

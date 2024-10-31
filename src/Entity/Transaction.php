@@ -36,8 +36,11 @@ class Transaction
     #[ORM\JoinColumn(nullable: false)]
     private ?warehouse $warehouse = null;
 
-    #[ORM\Column(type: Types::DECIMAL, precision: 6, scale: 2)]
+    #[ORM\Column(type: Types::DECIMAL, precision: 6, scale: 2, nullable: true)]
     private ?string $price = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $vat = null;
 
     public function getId(): ?int
     {
@@ -131,5 +134,26 @@ class Transaction
     public function __construct()
     {
         $this->transaction_date = new \DateTime();
+    }
+
+    public function getVat(): ?int
+    {
+        return $this->vat;
+    }
+
+    public function setVat(?int $vat): static
+    {
+        $this->vat = $vat;
+
+        return $this;
+    }
+
+    public function getTransactionTypeString(): string
+    {
+        return match ($this->transaction_type) {
+            TransactionType::IN => 'IN',
+            TransactionType::OUT => 'OUT',
+
+        };
     }
 }

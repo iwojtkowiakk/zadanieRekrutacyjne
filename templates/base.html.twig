@@ -6,7 +6,6 @@
     <link rel="icon"
           href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
-
     {% block stylesheets %}
     {% endblock %}
 
@@ -14,6 +13,9 @@
     {% endblock %}
 </head>
 <body>
+{% if form is defined %}
+    {% form_theme form 'bootstrap_5_layout.html.twig' %}
+{% endif %}
 
 {% if app.user %}
 
@@ -25,7 +27,7 @@
     </div>
 {% endfor %}
 <div class="d-flex">
-    <div class="bg-dark p-3" style="width: 250px; height: 100vh;">
+    <div class="bg-dark p-3" style="width: 250px; height: 100vh; position: fixed">
         <h5 class="text-light">Menu</h5>
         <ul class="nav flex-column">
             <li class="nav-item">
@@ -38,14 +40,11 @@
                 <a class="nav-link text-light" href="{{ path('admin_add_product') }}">Dodaj produkt</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-light" href="{{ path('warehouse_transaction') }}">Transakcja</a>
-            </li>
-            <li class="nav-item">
                 <a class="nav-link text-light" href="{{ path('warehouse_all') }}">Magazyny</a>
             </li>
         </ul>
     </div>
-    <div class="flex-grow-1 p-3">
+    <div class="flex-grow-1 p-3" style="margin-left: 250px;">
         {% block body %}{% endblock %}
     </div>
 </div>

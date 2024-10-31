@@ -1,23 +1,51 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<h1 class="h3 mb-3 font-weight-normal">Magazyn: <b>{{ warehouse.name }}</b></h1>
-
-
-<table class="table table-dark table-striped">
-    <thead>
-    <tr>
-        <th>Product Name</th>
-        <th>Quantity</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for product in products %}
+    <h1 class="h3 mb-3 font-weight-normal">Magazyn: <b>{{ warehouse.name }}</b></h1>
+    {{ form(form) }}
+    <hr>
+    <h1 class="h3 mb-3 font-weight-normal">Stan magazynu:</h1>
+    <table class="table table-dark table-striped">
+        <thead>
         <tr>
-            <td>{{ product.name }}</td>
-            <td>{{ product.quantity }}</td>
+            <th>Nazwa artykułu</th>
+            <th>Ilość w magazynie</th>
         </tr>
-    {% endfor %}
-    </tbody>
+        </thead>
+        <tbody>
+        {% for product in products %}
+            <tr>
+                <td>{{ product.name }}</td>
+                <td>{{ product.quantity }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <hr>
+    <h1 class="h3 mb-3 font-weight-normal">Historia transakcji:</h1>
+    <table class="table table-dark table-striped">
+        <thead>
+        <tr>
+            <th>Data</th>
+            <th>Typ Transakcji</th>
+            <th>Produkt</th>
+            <th>Ilość</th>
+            <th>Cena</th>
+            <th>Vat</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for transaction in transactions %}
+            <tr>
+                <td>{{ transaction.transactionDate|date('Y-m-d H:i') }}</td>
+                <td>{{ transaction.transactionTypeString }}</td>
+                <td>{{ transaction.product.name }}</td>
+                <td>{{ transaction.quantity }}</td>
+                <td>{{ transaction.price }}</td>
+                <td>{{ transaction.vat }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
 
-    {% endblock %}

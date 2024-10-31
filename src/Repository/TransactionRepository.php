@@ -13,7 +13,17 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class TransactionRepository extends ServiceEntityRepository
 {
-    public function findProductsInWarehouse(Warehouse $warehouse)
+    public function findAllByWarehouse(Warehouse $warehouse)
+    {
+        return $this->createQueryBuilder('t')
+            ->andWhere('t.warehouse = :warehouse')
+            ->setParameter('warehouse', $warehouse)
+            ->orderBy('t.transaction_date', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+        public function findProductsInWarehouse(Warehouse $warehouse)
     {
         return $this->createQueryBuilder('t')
             ->select('p.name, SUM(CASE WHEN t.transaction_type = :in THEN t.quantity ELSE 0 END) - SUM(CASE WHEN t.transaction_type = :out THEN t.quantity ELSE 0 END) as quantity')
@@ -26,6 +36,8 @@ class TransactionRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Transaction::class);

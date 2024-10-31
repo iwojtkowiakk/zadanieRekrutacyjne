@@ -31,7 +31,12 @@ class AdminController extends AbstractController
             );
 
             $user->setPassword($hashedPassword);
-//            $user->setRoles([$form->get('roles')->getData()]);
+//            $user->setRoles(User::class);
+
+            $warehouses=$form->get('warehouses')->getData();
+            foreach ($warehouses as $warehouse) {
+                $user->addWarehouse($warehouse);
+            }
 
             $entityManager->persist($user);
             $entityManager->flush();

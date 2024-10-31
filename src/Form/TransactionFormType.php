@@ -9,7 +9,6 @@ use App\Enum\TransactionType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -21,8 +20,8 @@ class TransactionFormType extends AbstractType
         $builder
             ->add('transactionType', ChoiceType::class, [
                 'choices' => [
-                    'IN' => TransactionType::IN,
-                    'OUT' => TransactionType::OUT,
+                    TransactionType::IN->value => TransactionType::IN,
+                    TransactionType::OUT->value => TransactionType::OUT,
                 ]
             ])
             ->add('warehouse', EntityType::class, [
@@ -35,10 +34,8 @@ class TransactionFormType extends AbstractType
                 'attr' => ['id' => 'product'],
             ])
             ->add('quantity', \Symfony\Component\Form\Extension\Core\Type\IntegerType::class)
-//            ->add('unit', HiddenType::class, [
-//                'attr'=>['id'=>'product'],
-//            ])
             ->add('price', \Symfony\Component\Form\Extension\Core\Type\NumberType::class)
+            ->add('vat', \Symfony\Component\Form\Extension\Core\Type\NumberType::class)
             ->add('save', SubmitType::class);
     }
 

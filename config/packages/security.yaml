@@ -25,9 +25,11 @@ security:
       form_login:
         login_path: security_login
         check_path: security_login
+        default_target_path: /warehouse
         enable_csrf: true
       logout:
         path: security_logout
+        target: security_login
         # where to redirect after logout
         # target: app_any_route
 #        check_path: security_login
@@ -49,7 +51,7 @@ security:
   access_control:
     - { path: ^/login, roles: PUBLIC_ACCESS }
     - { path: ^/admin, roles: ROLE_ADMIN }
-    - { path: ^/, roles: ROLE_USER }
+    - { path: ^/warehouse, roles: ROLE_USER }
 
 #when@test:
 #    security:

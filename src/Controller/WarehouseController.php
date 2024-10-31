@@ -19,30 +19,31 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class WarehouseController extends AbstractController
 {
-
-    #[Route('/warehouse/', name: 'warehouse_all')]
+    #[Route('/warehouse', name: 'warehouse_all')]
     public function listWarehouses(WarehouseRepository $warehouseRepository): Response
     {
-        $warehouses = $warehouseRepository->findAll();
+        $user = $this->getUser();
+
+        if ($this->isGranted('ROLE_ADMIN')) {
+            $warehouses = $warehouseRepository->findAll();
+        } else {
+            $warehouses = $user->getWarehouses();
+        }
 
         return $this->render('warehouse/warehouses.html.twig', [
             'warehouses' => $warehouses,
         ]);
     }
-    #[Route('/warehouse/{id}/list', name: 'warehouse_list')]
-    public function listProducts(Warehouse $warehouse, TransactionRepository $transactionRepository): Response
-    {
-        $products = $transactionRepository->findProductsInWarehouse($warehouse);
 
-        return $this->render('warehouse/list.html.twig', [
-            'warehouse' => $warehouse,
-            'products' => $products,
-        ]);
-    }
-
-    #[Route("/warehouse/transaction", "warehouse_transaction")]
-    public function transaction(Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/warehouse/{id}', name: 'warehouse_list')]
+    public function listProducts(Warehouse $warehouse, TransactionRepository $transactionRepository, Request $request, EntityManagerInterface $entityManager): Response
     {
+        $user = $this->getUser();
+
+        if (!$this->isGranted('ROLE_ADMIN') && !$user->getWarehouses()->contains($warehouse)) {
+            throw $this->createAccessDeniedException('Nie masz dostępu do tego magazynu.');
+        }
+
         $form = $this->createForm(TransactionFormType::class);
         $form->handleRequest($request);
 
@@ -53,6 +54,7 @@ class WarehouseController extends AbstractController
             $transaction->setProduct($form->get("product")->getData());
             $transaction->setQuantity($form->get("quantity")->getData());
             $transaction->setPrice($form->get("price")->getData());
+            $transaction->setVat($form->get("vat")->getData());
 
             $entityManager->persist($transaction);
             $entityManager->flush();
@@ -60,8 +62,14 @@ class WarehouseController extends AbstractController
             $this->addFlash('success', 'Transaction created successfully!');
         }
 
-        return $this->render('warehouse/transaction.html.twig', [
+        $products = $transactionRepository->findProductsInWarehouse($warehouse);
+        $transactions = $transactionRepository->findAllByWarehouse($warehouse);
+
+        return $this->render('warehouse/list.html.twig', [
             'form' => $form->createView(),
+            'warehouse' => $warehouse,
+            'products' => $products,
+            'transactions' => $transactions,
         ]);
     }
 
