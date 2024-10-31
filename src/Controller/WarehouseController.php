@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Product;
 use App\Entity\Transaction;
 use App\Entity\Warehouse;
+use App\Enum\TransactionType;
 use App\Form\ProductAddFormType;
 use App\Form\RegistrationFormType;
 use App\Form\TransactionFormType;
@@ -53,8 +54,15 @@ class WarehouseController extends AbstractController
             $transaction->setWarehouse($form->get("warehouse")->getData());
             $transaction->setProduct($form->get("product")->getData());
             $transaction->setQuantity($form->get("quantity")->getData());
-            $transaction->setPrice($form->get("price")->getData());
-            $transaction->setVat($form->get("vat")->getData());
+            $price = $form->get("price")->getData();
+            if ($price !== null) {
+                $transaction->setPrice($price);
+            }
+
+            $vat = $form->get("vat")->getData();
+            if ($vat !== null) {
+                $transaction->setVat($vat);
+            }
 
             $entityManager->persist($transaction);
             $entityManager->flush();

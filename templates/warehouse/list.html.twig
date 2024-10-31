@@ -2,7 +2,47 @@
 
 {% block body %}
     <h1 class="h3 mb-3 font-weight-normal">Magazyn: <b>{{ warehouse.name }}</b></h1>
-    {{ form(form) }}
+    {{ form_start(form) }}
+    {{ form_row(form.transactionType) }}
+    {{ form_row(form.warehouse) }}
+    {{ form_row(form.product) }}
+    {{ form_row(form.quantity) }}
+    {{ form_row(form.price) }}
+    {{ form_row(form.vat) }}
+    {{ form_row(form.save) }}
+    {{ form_end(form) }}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const transactionTypeField = document.querySelector("#transaction_form_transactionType");
+            const priceField = document.querySelector("#transaction_form_price")
+            const vatField = document.querySelector("#transaction_form_vat")
+
+            if (!transactionTypeField) {
+                console.error('Element with id "transactionType" not found.');
+                return;
+            }
+
+            transactionTypeField.addEventListener('change', function () {
+                console.log("jebanie");
+                console.log(this.value)
+                // 0/1 === IN/OUT
+                if (this.value == 1) {
+                    priceField.value = '';
+                    vatField.value = '';
+                    priceField.setAttribute('disabled', 'disabled');
+                    vatField.setAttribute('disabled', 'disabled');
+                } else {
+                    priceField.removeAttribute('disabled');
+                    vatField.removeAttribute('disabled');
+                }
+            });
+
+            // Initial check
+            transactionTypeField.dispatchEvent(new Event('change'));
+        });
+    </script>
+
     <hr>
     <h1 class="h3 mb-3 font-weight-normal">Stan magazynu:</h1>
     <table class="table table-dark table-striped">

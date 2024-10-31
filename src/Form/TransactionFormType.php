@@ -22,7 +22,7 @@ class TransactionFormType extends AbstractType
                 'choices' => [
                     TransactionType::IN->value => TransactionType::IN,
                     TransactionType::OUT->value => TransactionType::OUT,
-                ]
+                ],
             ])
             ->add('warehouse', EntityType::class, [
                 'class' => Warehouse::class,
@@ -31,11 +31,12 @@ class TransactionFormType extends AbstractType
             ->add('product', EntityType::class, [
                 'class' => Product::class,
                 'choice_label' => 'name',
-                'attr' => ['id' => 'product'],
             ])
             ->add('quantity', \Symfony\Component\Form\Extension\Core\Type\IntegerType::class)
-            ->add('price', \Symfony\Component\Form\Extension\Core\Type\NumberType::class)
-            ->add('vat', \Symfony\Component\Form\Extension\Core\Type\NumberType::class)
+            ->add('price', \Symfony\Component\Form\Extension\Core\Type\NumberType::class, [
+            ])
+            ->add('vat', \Symfony\Component\Form\Extension\Core\Type\NumberType::class, [
+            ])
             ->add('save', SubmitType::class);
     }
 
