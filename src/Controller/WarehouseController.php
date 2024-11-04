@@ -14,9 +14,12 @@ use App\Repository\TransactionRepository;
 use App\Repository\WarehouseRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class WarehouseController extends AbstractController
 {
@@ -37,7 +40,7 @@ class WarehouseController extends AbstractController
     }
 
     #[Route('/warehouse/{id}', name: 'warehouse_list')]
-    public function listProducts(Warehouse $warehouse, TransactionRepository $transactionRepository, Request $request, EntityManagerInterface $entityManager): Response
+    public function listProducts(Warehouse $warehouse, TransactionRepository $transactionRepository, Request $request, SluggerInterface $slugger, EntityManagerInterface $entityManager, #[Autowire('%kernel.project_dir/public/uploads/files')] string $filesDirectory): Response
     {
         $user = $this->getUser();
 
@@ -49,21 +52,29 @@ class WarehouseController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $file = $form->get('file')->getData();
             $transaction = new Transaction();
-            $transaction->setTransactionType($form->get("transactionType")->getData());
-            $transaction->setWarehouse($form->get("warehouse")->getData());
+            $transactionType = $form->get("transactionType")->getData();
+            $transaction->setTransactionType($transactionType);
+            $transaction->setWarehouse($warehouse);
             $transaction->setProduct($form->get("product")->getData());
             $transaction->setQuantity($form->get("quantity")->getData());
-            $price = $form->get("price")->getData();
-            if ($price !== null) {
-                $transaction->setPrice($price);
-            }
+            if ($transactionType === TransactionType::IN) {
+                $transaction->setPrice($form->get("price")->getData());
+                $transaction->setVat($form->get("vat")->getData());
+                $file = $form->get("file")->getData();
+                if ($file) {
+                    $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                    $safeFilename = $slugger->slug($originalFilename);
+                    $newFilename = $safeFilename . '-' . uniqid() . '.' . $file->guessExtension();
+                    try {
+                        $file->move($filesDirectory, $newFilename);
+                    } catch (FileException $e) {
 
-            $vat = $form->get("vat")->getData();
-            if ($vat !== null) {
-                $transaction->setVat($vat);
+                    }
+                    $transaction->setFile($newFilename);
+                }
             }
-
             $entityManager->persist($transaction);
             $entityManager->flush();
 

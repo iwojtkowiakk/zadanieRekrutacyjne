@@ -1,8 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Dodaj użyszkodnika{% endblock %}
+{% block title %}Dodaj użytkownika{% endblock %}
 
 {% block body %}
     <h1 class="h3 mb-3 font-weight-normal">Dodaj użytkownika</h1>
-    {{ form(form) }}
+    <div class="custom-width">
+        {{ form(form) }}
+    </div>
 {% endblock %}

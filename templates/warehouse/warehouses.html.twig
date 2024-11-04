@@ -1,11 +1,16 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Magazyny{% endblock %}
+
 {% block body %}
     <h1 class="h3 mb-3 font-weight-normal">Przejdź do magazynu:</h1>
-    <ul class="list-group">
-        {% for warehouse in warehouses %}
-            <a href="{{ path('warehouse_list',{'id': warehouse.id}) }}"
-               class="list-group-item list-group-item-action">{{ warehouse.name }}</a>
-        {% endfor %}
-    </ul>
+    <div class="custom-width">
+        <ul class="list-group">
+            {% for warehouse in warehouses %}
+                <a href="{{ path('warehouse_list',{'id': warehouse.id}) }}"
+                   class="list-group-item list-group-item-action">{{ warehouse.name }}</a>
+            {% endfor %}
+        </ul>
+    </div>
+
 {% endblock %}

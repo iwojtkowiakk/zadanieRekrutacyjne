@@ -9,9 +9,11 @@ use App\Enum\TransactionType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
 
 class TransactionFormType extends AbstractType
 {
@@ -19,25 +21,44 @@ class TransactionFormType extends AbstractType
     {
         $builder
             ->add('transactionType', ChoiceType::class, [
+                'label' => 'Typ transakcji',
                 'choices' => [
-                    TransactionType::IN->value => TransactionType::IN,
-                    TransactionType::OUT->value => TransactionType::OUT,
+                    "Przyjęcie" => TransactionType::IN,
+                    "Wydanie" => TransactionType::OUT,
                 ],
             ])
-            ->add('warehouse', EntityType::class, [
-                'class' => Warehouse::class,
-                'choice_label' => 'name',
-            ])
             ->add('product', EntityType::class, [
+                'label' => 'Produkt',
                 'class' => Product::class,
                 'choice_label' => 'name',
             ])
-            ->add('quantity', \Symfony\Component\Form\Extension\Core\Type\IntegerType::class)
+            ->add('quantity', \Symfony\Component\Form\Extension\Core\Type\IntegerType::class, [
+                'label' => 'Liczba',
+            ])
             ->add('price', \Symfony\Component\Form\Extension\Core\Type\NumberType::class, [
+                'label' => 'Cena jednostkowa',
             ])
             ->add('vat', \Symfony\Component\Form\Extension\Core\Type\NumberType::class, [
+                'label' => 'VAT',
             ])
-            ->add('save', SubmitType::class);
+            ->add('file', FileType::class, [
+                'label' => 'Plik (PDF lub XML)',
+                'mapped' => false,
+                'required' => false,
+                'constraints' => [
+                    new File([
+                        'maxSize' => '10000000',
+                        'mimeTypes' => [
+                            'application/pdf',
+                            'application/xml',
+                        ],
+                        'mimeTypesMessage' => 'Proszę wybrać odpowiedni dokument',
+                    ])
+                ],
+            ])
+            ->add('save', SubmitType::class, [
+                'label' => 'Zapisz',
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

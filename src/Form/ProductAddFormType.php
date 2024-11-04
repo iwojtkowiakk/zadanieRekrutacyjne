@@ -15,8 +15,14 @@ class ProductAddFormType extends AbstractType
     {
         $builder
             ->setMethod('POST')
-            ->add('name', TextType::class)
-            ->add('unit', TextType::class)
-            ->add('save', SubmitType::class);
+            ->add('name', TextType::class, [
+                'label' => 'Nazwa produktu',
+            ])
+            ->add('unit', TextType::class, [
+                'label' => 'Jednostka miary',
+            ])
+            ->add('save', SubmitType::class, [
+                'label' => 'Dodaj',
+            ]);
     }
 }

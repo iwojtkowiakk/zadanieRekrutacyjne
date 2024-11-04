@@ -7,6 +7,21 @@
           href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
     {% block stylesheets %}
+        <style>
+            .custom-width {
+                max-width: 30%;
+            }
+
+            .nav .nav-item .nav {
+                margin-left: 20px;
+            }
+
+            .nav .nav-item .nav .nav-link::before {
+                content: '•';
+                color: #ffffff;
+                margin-right: 8px;
+            }
+        </style>
     {% endblock %}
 
     {% block javascripts %}
@@ -17,32 +32,47 @@
     {% form_theme form 'bootstrap_5_layout.html.twig' %}
 {% endif %}
 
-{% if app.user %}
-
-{% endif %}
-
 {% for type, message in app.flashes %}
     <div class="alert alert-{{ type }}">
         {{ message[0] }}
     </div>
 {% endfor %}
 <div class="d-flex">
-    <div class="bg-dark p-3" style="width: 250px; height: 100vh; position: fixed">
-        <h5 class="text-light">Menu</h5>
-        <ul class="nav flex-column">
-            <li class="nav-item">
-                <a class="nav-link text-light" href="{{ path('admin_add_user') }}">Dodaj użytkownika</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-light" href="{{ path('admin_add_warehouse') }}">Dodaj magazyn</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-light" href="{{ path('admin_add_product') }}">Dodaj produkt</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-light" href="{{ path('warehouse_all') }}">Magazyny</a>
-            </li>
-        </ul>
+    <div class="bg-dark p-3"
+         style="position: fixed; width: 250px; height: 100vh; display: flex; flex-direction: column; justify-content: space-between;">
+        {% if app.user %}
+            <h5 class="text-light">Menu</h5>
+            <ul class="nav flex-column">
+                {% if is_granted('ROLE_ADMIN') %}
+                    <li class="nav-item">
+                        <a class="nav-link text-light" href="{{ path('admin_add_user') }}">Dodaj użytkownika</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-light" href="{{ path('admin_add_warehouse') }}">Dodaj magazyn</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-light" href="{{ path('admin_add_product') }}">Dodaj produkt</a>
+                    </li>
+                {% endif %}
+                {% if is_granted('ROLE_USER') %}
+                    <li class="nav-item">
+                        <a class="nav-link text-light" href="{{ path('warehouse_all') }}">Magazyny</a>
+                        <ul class="nav flex-column">
+                            {% for warehouse in get_warehouses(app.user) %}
+                                <li class="nav-item">
+                                    <a class="nav-link text-light"
+                                       href="{{ path('warehouse_list',{'id': warehouse.id}) }}">{{ warehouse.name }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                {% endif %}
+            </ul>
+            <div class="mt-auto p-2" style="display: flex; width: 100%; justify-content: center; align-items: center;">
+                <span class="navbar-text text-light">{{ app.user.username }}</span>
+                <a class="btn btn-outline-light ms-2" href="{{ path('security_logout') }}">Wyloguj</a>
+            </div>
+        {% endif %}
     </div>
     <div class="flex-grow-1 p-3" style="margin-left: 250px;">
         {% block body %}{% endblock %}

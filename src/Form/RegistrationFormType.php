@@ -16,8 +16,12 @@ class RegistrationFormType extends AbstractType
     {
         $builder
             ->setMethod('POST')
-            ->add('username', TextType::class)
-            ->add('password', PasswordType::class)
+            ->add('username', TextType::class,[
+                'label' => 'Login',
+            ])
+            ->add('password', PasswordType::class,[
+                'label' => 'Hasło',
+            ])
 //            ->add('roles', ChoiceType::class, [
 //                'choices' => [
 //                    'User' => 'ROLE_USER',
@@ -25,11 +29,14 @@ class RegistrationFormType extends AbstractType
 //                ]
 //            ])
             ->add('warehouses', EntityType::class, [
+                'label' => 'Przypisz do magazynów:',
                 'class' => Warehouse::class,
                 'choice_label' => 'name',
                 'multiple' => true,
                 'expanded' => true,
             ])
-            ->add('save', SubmitType::class);
+            ->add('save', SubmitType::class,[
+                'label' => 'Dodaj',
+            ]);
     }
 }

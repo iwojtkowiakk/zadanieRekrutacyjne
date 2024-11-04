@@ -15,13 +15,18 @@ class WarehouseAddFormType extends AbstractType
     {
         $builder
             ->setMethod('POST')
-            ->add('name', TextType::class)
+            ->add('name', TextType::class, [
+                'label' => 'Nazwa magazynu',
+            ])
             ->add('users', EntityType::class, [
+                'label' => "Przypisz do użytkowników:",
                 'class' => User::class,
                 'choice_label' => 'username',
                 'multiple' => true,
                 'expanded' => true,
             ])
-            ->add('save', SubmitType::class);
+            ->add('save', SubmitType::class, [
+                'label' => 'Dodaj',
+            ]);
     }
 }
