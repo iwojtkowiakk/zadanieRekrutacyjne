@@ -14,8 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\Count;
-use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class TransactionFormType extends AbstractType
 {
@@ -32,12 +31,12 @@ class TransactionFormType extends AbstractType
             ->add('product', EntityType::class, [
                 'label' => 'Produkt',
                 'class' => Product::class,
-                'choice_label' => function(Product $product) {
-                return $product->getName(). ' ('.$product->getUnit().')';
+                'choice_label' => function (Product $product) {
+                    return $product->getName() . ' (' . $product->getUnit() . ')';
                 },
             ])
             ->add('quantity', IntegerType::class, [
-                'label' => 'Ilość (w jednostkach produktu)',
+                'label' => 'Ilość (w jednostkach miary produktu)',
             ])
             ->add('price', NumberType::class, [
                 'label' => 'Cena jednostkowa',
@@ -51,17 +50,19 @@ class TransactionFormType extends AbstractType
                 'required' => false,
                 'multiple' => true,
                 'constraints' => [
-                    new Count([
+                    new Assert\All([
+                        new Assert\File([
+                            'maxSize' => '10M',
+                            'mimeTypes' => [
+                                'application/pdf',
+                                'application/xml',
+                            ],
+                            'mimeTypesMessage' => 'Proszę wybrać odpowiedni dokument',
+                        ])
+                    ]),
+                    new Assert\Count([
                         'min' => 0,
                         'max' => 4,
-                    ]),
-                    new File([
-                        'maxSize' => '10M',
-                        'mimeTypes' => [
-                            'application/pdf',
-                            'application/xml',
-                        ],
-                        'mimeTypesMessage' => 'Proszę wybrać odpowiedni dokument',
                     ])
                 ],
             ])

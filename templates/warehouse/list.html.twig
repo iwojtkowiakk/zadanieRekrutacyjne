@@ -38,8 +38,6 @@
             }
 
             transactionTypeField.addEventListener('change', function () {
-                console.log("jebanie");
-                console.log(this.value)
                 if (this.value == 1) {
                     priceField.value = '';
                     vatField.value = '';
@@ -65,6 +63,7 @@
         <tr>
             <th>Nazwa artykułu</th>
             <th>Ilość w magazynie</th>
+            <th>Jednostka miary</th>
         </tr>
         </thead>
         <tbody>
@@ -72,6 +71,7 @@
             <tr>
                 <td>{{ product.name }}</td>
                 <td>{{ product.quantity }}</td>
+                <td>{{ product.unit }}</td>
             </tr>
         {% endfor %}
         </tbody>
@@ -84,8 +84,8 @@
             <th>Data</th>
             <th>Typ Transakcji</th>
             <th>Produkt</th>
-            <th>Jednostka</th>
             <th>Ilość</th>
+            <th>Jednostka</th>
             <th>Cena</th>
             <th>Vat</th>
         </tr>
@@ -96,8 +96,8 @@
                 <td>{{ transaction.transactionDate|date('Y-m-d H:i') }}</td>
                 <td>{{ transaction.transactionTypeString }}</td>
                 <td>{{ transaction.product.name }}</td>
-                <td>{{ transaction.product.unit }}</td>
                 <td>{{ transaction.quantity }}</td>
+                <td>{{ transaction.product.unit }}</td>
                 <td>{{ transaction.price|default('-') }}</td>
                 <td>{{ transaction.vat|default('-') }}</td>
             </tr>

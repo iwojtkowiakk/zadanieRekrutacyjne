@@ -26,7 +26,7 @@ class TransactionRepository extends ServiceEntityRepository
         public function findProductsInWarehouse(Warehouse $warehouse)
     {
         return $this->createQueryBuilder('t')
-            ->select('p.name, SUM(CASE WHEN t.transaction_type = :in THEN t.quantity ELSE 0 END) - SUM(CASE WHEN t.transaction_type = :out THEN t.quantity ELSE 0 END) as quantity')
+            ->select('p.name, p.unit, SUM(CASE WHEN t.transaction_type = :in THEN t.quantity ELSE 0 END) - SUM(CASE WHEN t.transaction_type = :out THEN t.quantity ELSE 0 END) as quantity')
             ->join('t.product', 'p')
             ->where('t.warehouse = :warehouse')
             ->groupBy('p.id')

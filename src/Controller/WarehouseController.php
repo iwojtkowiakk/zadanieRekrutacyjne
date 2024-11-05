@@ -66,27 +66,28 @@ class WarehouseController extends AbstractController
             if ($transactionType === TransactionType::IN) {
                 $transaction->setPrice($form->get("price")->getData());
                 $transaction->setVat($form->get("vat")->getData());
-                $file = $form->get("file")->getData();
 
-                if ($file) {
-                    $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-                    $safeFilename = $slugger->slug($originalFilename);
-                    $newFilename = $safeFilename . '-' . uniqid() . '.' . $file->guessExtension();
+                $files = $form->get("file")->getData();
+                if ($files) {
+                    foreach ($files as $file) {
+                        $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                        $safeFilename = $slugger->slug($originalFilename);
+                        $newFilename = $safeFilename . '-' . uniqid() . '.' . $file->guessExtension();
 
-                    try {
-                        $file->move($filesDirectory, $newFilename);
-                    } catch (FileException $e) {
+                        try {
+                            $file->move($filesDirectory, $newFilename);
+                        } catch (FileException $e) {
 
+                        }
+                        $transaction->setFile($newFilename);
                     }
-
-                    $transaction->setFile($newFilename);
                 }
             }
 
             $entityManager->persist($transaction);
             $entityManager->flush();
 
-            if(!empty($transaction->getId())) {
+            if (!empty($transaction->getId())) {
                 $this->addFlash('success', 'Wykonano transkację');
             }
 
