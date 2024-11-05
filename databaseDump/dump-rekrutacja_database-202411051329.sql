@@ -16,16 +16,6 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Dumping data for table `doctrine_migration_versions`
---
-
-LOCK TABLES `doctrine_migration_versions` WRITE;
-/*!40000 ALTER TABLE `doctrine_migration_versions` DISABLE KEYS */;
-INSERT INTO `doctrine_migration_versions` VALUES ('DoctrineMigrations\\Version20241024122406','2024-10-24 14:35:06',59),('DoctrineMigrations\\Version20241029081203','2024-10-29 09:12:22',76),('DoctrineMigrations\\Version20241029083014','2024-10-29 09:30:28',129),('DoctrineMigrations\\Version20241029122916','2024-10-29 13:29:29',128),('DoctrineMigrations\\Version20241029141620','2024-10-29 15:16:29',36),('DoctrineMigrations\\Version20241030075312','2024-10-30 08:53:22',28),('DoctrineMigrations\\Version20241030080550','2024-10-30 09:05:55',100),('DoctrineMigrations\\Version20241030082133','2024-10-30 09:21:38',27),('DoctrineMigrations\\Version20241030082308','2024-10-30 09:23:12',66),('DoctrineMigrations\\Version20241030083555','2024-10-30 09:36:05',14),('DoctrineMigrations\\Version20241030083911','2024-10-30 09:39:16',10),('DoctrineMigrations\\Version20241030090354','2024-10-30 10:04:00',14),('DoctrineMigrations\\Version20241030122409','2024-10-30 13:24:19',81);
-/*!40000 ALTER TABLE `doctrine_migration_versions` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Dumping data for table `product`
 --
 
