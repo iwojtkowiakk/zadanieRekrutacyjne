@@ -9,7 +9,7 @@
     {% block stylesheets %}
         <style>
             .custom-width {
-                max-width: 30%;
+                max-width: 600px;
             }
 
             .nav .nav-item .nav {
@@ -32,11 +32,6 @@
     {% form_theme form 'bootstrap_5_layout.html.twig' %}
 {% endif %}
 
-{% for type, message in app.flashes %}
-    <div class="alert alert-{{ type }}">
-        {{ message[0] }}
-    </div>
-{% endfor %}
 <div class="d-flex">
     <div class="bg-dark p-3"
          style="position: fixed; width: 250px; height: 100vh; display: flex; flex-direction: column; justify-content: space-between;">
@@ -75,6 +70,12 @@
         {% endif %}
     </div>
     <div class="flex-grow-1 p-3" style="margin-left: 250px;">
+        {% for type, message in app.flashes %}
+            <div class="alert alert-{{ type }}">
+                {{ message[0] }}
+            </div>
+        {% endfor %}
+
         {% block body %}{% endblock %}
     </div>
 </div>

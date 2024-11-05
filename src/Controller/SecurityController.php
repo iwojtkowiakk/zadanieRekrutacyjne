@@ -9,6 +9,12 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {
+    #[Route(path: '/', name: 'security_home')]
+    public function home(): Response
+    {
+        return $this->redirectToRoute("warehouse_all");
+    }
+
     #[Route(path: '/login', name: 'security_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
@@ -25,6 +31,6 @@ class SecurityController extends AbstractController
     #[Route(path: '/logout', name: 'security_logout')]
     public function logout(): void
     {
-        throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
+        throw new \LogicException('');
     }
 }

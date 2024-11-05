@@ -16,10 +16,10 @@ class RegistrationFormType extends AbstractType
     {
         $builder
             ->setMethod('POST')
-            ->add('username', TextType::class,[
+            ->add('username', TextType::class, [
                 'label' => 'Login',
             ])
-            ->add('password', PasswordType::class,[
+            ->add('password', PasswordType::class, [
                 'label' => 'Hasło',
             ])
 //            ->add('roles', ChoiceType::class, [
@@ -35,7 +35,7 @@ class RegistrationFormType extends AbstractType
                 'multiple' => true,
                 'expanded' => true,
             ])
-            ->add('save', SubmitType::class,[
+            ->add('save', SubmitType::class, [
                 'label' => 'Dodaj',
             ]);
     }

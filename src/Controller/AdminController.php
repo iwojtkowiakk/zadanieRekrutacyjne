@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\Warehouse;
 use App\Form\RegistrationFormType;
+use App\Form\WarehouseAddFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,9 +33,8 @@ class AdminController extends AbstractController
             );
 
             $user->setPassword($hashedPassword);
-//            $user->setRoles(User::class);
 
-            $warehouses=$form->get('warehouses')->getData();
+            $warehouses = $form->get('warehouses')->getData();
             foreach ($warehouses as $warehouse) {
                 $user->addWarehouse($warehouse);
             }
@@ -42,11 +43,43 @@ class AdminController extends AbstractController
             $entityManager->flush();
 
             if (!empty($user->getId())) {
-                $this->addFlash("success", "User added successfully");
+                $this->addFlash("success", "Dodano użytkownika");
             }
+
+            return $this->redirectToRoute('admin_add_user');
         }
 
         return $this->render('admin/add_user.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route("/admin/add-warehouse", "admin_add_warehouse", methods: ["GET", "POST"])]
+    public function addWarehouse(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createForm(WarehouseAddFormType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $warehouse = new Warehouse();
+            $warehouse->setName($form->get("name")->getData());
+
+            $users = $form->get("users")->getData();
+            foreach ($users as $user) {
+                $warehouse->addUser($user);
+            }
+
+            $entityManager->persist($warehouse);
+            $entityManager->flush();
+
+            if (!empty($warehouse->getId())) {
+                $this->addFlash("success", "Dodano magazyn");
+            }
+
+            return $this->redirectToRoute('admin_add_warehouse');
+        }
+
+        return $this->render('admin/add_warehouse.html.twig', [
             'form' => $form->createView(),
         ]);
     }

@@ -6,6 +6,13 @@
 parameters:
 
 services:
+  app.listener.redirect404:
+    class: App\EventListeners\Redirect404
+    arguments:
+      - "@router"
+    tags:
+      - { name: kernel.event_listener, event: kernel.exception, method: onKernelException}
+
   App\Twig\AppExtension:
     arguments:
       $warehouseRepository: '@App\Repository\WarehouseRepository'

@@ -4,15 +4,17 @@ namespace App\Form;
 
 use App\Entity\Product;
 use App\Entity\Transaction;
-use App\Entity\Warehouse;
 use App\Enum\TransactionType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Count;
 use Symfony\Component\Validator\Constraints\File;
 
 class TransactionFormType extends AbstractType
@@ -30,24 +32,31 @@ class TransactionFormType extends AbstractType
             ->add('product', EntityType::class, [
                 'label' => 'Produkt',
                 'class' => Product::class,
-                'choice_label' => 'name',
+                'choice_label' => function(Product $product) {
+                return $product->getName(). ' ('.$product->getUnit().')';
+                },
             ])
-            ->add('quantity', \Symfony\Component\Form\Extension\Core\Type\IntegerType::class, [
-                'label' => 'Liczba',
+            ->add('quantity', IntegerType::class, [
+                'label' => 'Ilość (w jednostkach produktu)',
             ])
-            ->add('price', \Symfony\Component\Form\Extension\Core\Type\NumberType::class, [
+            ->add('price', NumberType::class, [
                 'label' => 'Cena jednostkowa',
             ])
-            ->add('vat', \Symfony\Component\Form\Extension\Core\Type\NumberType::class, [
+            ->add('vat', NumberType::class, [
                 'label' => 'VAT',
             ])
             ->add('file', FileType::class, [
-                'label' => 'Plik (PDF lub XML)',
+                'label' => 'Plik (PDF lub XML, max. 4 pliki)',
                 'mapped' => false,
                 'required' => false,
+                'multiple' => true,
                 'constraints' => [
+                    new Count([
+                        'min' => 0,
+                        'max' => 4,
+                    ]),
                     new File([
-                        'maxSize' => '10000000',
+                        'maxSize' => '10M',
                         'mimeTypes' => [
                             'application/pdf',
                             'application/xml',

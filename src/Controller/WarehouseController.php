@@ -7,9 +7,7 @@ use App\Entity\Transaction;
 use App\Entity\Warehouse;
 use App\Enum\TransactionType;
 use App\Form\ProductAddFormType;
-use App\Form\RegistrationFormType;
 use App\Form\TransactionFormType;
-use App\Form\WarehouseAddFormType;
 use App\Repository\TransactionRepository;
 use App\Repository\WarehouseRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -40,45 +38,59 @@ class WarehouseController extends AbstractController
     }
 
     #[Route('/warehouse/{id}', name: 'warehouse_list')]
-    public function listProducts(Warehouse $warehouse, TransactionRepository $transactionRepository, Request $request, SluggerInterface $slugger, EntityManagerInterface $entityManager, #[Autowire('%kernel.project_dir/public/uploads/files')] string $filesDirectory): Response
+    public function listProducts(?Warehouse $warehouse, TransactionRepository $transactionRepository, Request $request, SluggerInterface $slugger, EntityManagerInterface $entityManager, #[Autowire('%kernel.project_dir/public/uploads/files')] string $filesDirectory): Response
     {
         $user = $this->getUser();
 
+        if (!$warehouse) {
+            $this->addFlash("danger", "Nie znaleziono magazynu");
+            return $this->redirectToRoute('warehouse_all');
+        }
+
         if (!$this->isGranted('ROLE_ADMIN') && !$user->getWarehouses()->contains($warehouse)) {
-            throw $this->createAccessDeniedException('Nie masz dostępu do tego magazynu.');
+            $this->addFlash("danger", "Nie masz dostępu do tego magazynu.");
+            return $this->redirectToRoute('warehouse_all');
         }
 
         $form = $this->createForm(TransactionFormType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $file = $form->get('file')->getData();
             $transaction = new Transaction();
             $transactionType = $form->get("transactionType")->getData();
             $transaction->setTransactionType($transactionType);
             $transaction->setWarehouse($warehouse);
             $transaction->setProduct($form->get("product")->getData());
             $transaction->setQuantity($form->get("quantity")->getData());
+
             if ($transactionType === TransactionType::IN) {
                 $transaction->setPrice($form->get("price")->getData());
                 $transaction->setVat($form->get("vat")->getData());
                 $file = $form->get("file")->getData();
+
                 if ($file) {
                     $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
                     $safeFilename = $slugger->slug($originalFilename);
                     $newFilename = $safeFilename . '-' . uniqid() . '.' . $file->guessExtension();
+
                     try {
                         $file->move($filesDirectory, $newFilename);
                     } catch (FileException $e) {
 
                     }
+
                     $transaction->setFile($newFilename);
                 }
             }
+
             $entityManager->persist($transaction);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Transaction created successfully!');
+            if(!empty($transaction->getId())) {
+                $this->addFlash('success', 'Wykonano transkację');
+            }
+
+            return $this->redirectToRoute('warehouse_list', ['id' => $warehouse->getId()]);
         }
 
         $products = $transactionRepository->findProductsInWarehouse($warehouse);
@@ -89,34 +101,6 @@ class WarehouseController extends AbstractController
             'warehouse' => $warehouse,
             'products' => $products,
             'transactions' => $transactions,
-        ]);
-    }
-
-    #[Route("/admin/add-warehouse", "admin_add_warehouse", methods: ["GET", "POST"])]
-    public function addWarehouse(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $form = $this->createForm(WarehouseAddFormType::class);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $warehouse = new Warehouse();
-            $warehouse->setName($form->get("name")->getData());
-
-            $users = $form->get("users")->getData();
-            foreach ($users as $user) {
-                $warehouse->addUser($user);
-            }
-
-            $entityManager->persist($warehouse);
-            $entityManager->flush();
-
-            if (!empty($warehouse->getId())) {
-                $this->addFlash("success", "Warehouse added successfully");
-            }
-        }
-
-        return $this->render('admin/add_warehouse.html.twig', [
-            'form' => $form->createView(),
         ]);
     }
 
@@ -135,8 +119,10 @@ class WarehouseController extends AbstractController
             $entityManager->flush();
 
             if (!empty($product->getId())) {
-                $this->addFlash("success", "Product added successfully");
+                $this->addFlash("success", "Dodano produkt");
             }
+
+            return $this->redirectToRoute('admin_add_product');
         }
 
         return $this->render('admin/add_product.html.twig', [
