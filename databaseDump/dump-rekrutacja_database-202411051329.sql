@@ -1,0 +1,87 @@
+-- MySQL dump 10.13  Distrib 8.0.19, for Win64 (x86_64)
+--
+-- Host: localhost    Database: rekrutacja_database
+-- ------------------------------------------------------
+-- Server version	5.5.5-10.4.32-MariaDB
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Dumping data for table `doctrine_migration_versions`
+--
+
+LOCK TABLES `doctrine_migration_versions` WRITE;
+/*!40000 ALTER TABLE `doctrine_migration_versions` DISABLE KEYS */;
+INSERT INTO `doctrine_migration_versions` VALUES ('DoctrineMigrations\\Version20241024122406','2024-10-24 14:35:06',59),('DoctrineMigrations\\Version20241029081203','2024-10-29 09:12:22',76),('DoctrineMigrations\\Version20241029083014','2024-10-29 09:30:28',129),('DoctrineMigrations\\Version20241029122916','2024-10-29 13:29:29',128),('DoctrineMigrations\\Version20241029141620','2024-10-29 15:16:29',36),('DoctrineMigrations\\Version20241030075312','2024-10-30 08:53:22',28),('DoctrineMigrations\\Version20241030080550','2024-10-30 09:05:55',100),('DoctrineMigrations\\Version20241030082133','2024-10-30 09:21:38',27),('DoctrineMigrations\\Version20241030082308','2024-10-30 09:23:12',66),('DoctrineMigrations\\Version20241030083555','2024-10-30 09:36:05',14),('DoctrineMigrations\\Version20241030083911','2024-10-30 09:39:16',10),('DoctrineMigrations\\Version20241030090354','2024-10-30 10:04:00',14),('DoctrineMigrations\\Version20241030122409','2024-10-30 13:24:19',81);
+/*!40000 ALTER TABLE `doctrine_migration_versions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `product`
+--
+
+LOCK TABLES `product` WRITE;
+/*!40000 ALTER TABLE `product` DISABLE KEYS */;
+INSERT INTO `product` VALUES (1,'Deska','Metr'),(2,'Blacha','Metr'),(3,'Aluminium','Milimetr'),(4,'Stal','Kilometr'),(5,'Gruz','Kilogram');
+/*!40000 ALTER TABLE `product` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `transaction`
+--
+
+LOCK TABLES `transaction` WRITE;
+/*!40000 ALTER TABLE `transaction` DISABLE KEYS */;
+INSERT INTO `transaction` VALUES (1,1,'IN',100,'2024-11-05 10:37:04',NULL,1,99.99,23),(2,1,'IN',12,'2024-11-05 10:38:04',NULL,1,98.00,25),(3,1,'IN',11,'2024-11-05 10:42:16',NULL,1,99.00,12),(4,1,'IN',10,'2024-11-05 12:40:19',NULL,1,12.00,23),(5,1,'IN',10,'2024-11-05 12:43:43',NULL,1,10.00,23),(6,1,'IN',100,'2024-11-05 12:44:01','Z-15B-672a050130af5.pdf',1,12.98,25),(7,1,'IN',130,'2024-11-05 12:44:25','Z-15B-672a051963b00.pdf',1,15.99,23),(8,1,'OUT',10,'2024-11-05 12:46:32',NULL,1,NULL,NULL),(9,5,'IN',1000,'2024-11-05 12:50:00',NULL,2,0.99,23),(10,5,'OUT',9,'2024-11-05 12:52:02',NULL,2,NULL,NULL),(11,5,'OUT',80,'2024-11-05 12:52:22',NULL,2,NULL,NULL),(12,4,'IN',19,'2024-11-05 12:52:35',NULL,2,100.00,23),(13,2,'IN',100,'2024-11-05 12:52:53',NULL,3,99.99,23),(14,5,'IN',9,'2024-11-05 12:53:04',NULL,3,23.88,23),(15,3,'IN',1000,'2024-11-05 12:53:23',NULL,3,100.00,23),(16,4,'IN',1,'2024-11-05 12:54:39',NULL,1,55.00,23),(17,4,'IN',28,'2024-11-05 13:24:52',NULL,3,99.00,20),(18,5,'IN',100,'2024-11-05 13:25:47',NULL,3,1.00,23),(19,5,'OUT',1,'2024-11-05 13:25:53',NULL,3,NULL,NULL),(20,1,'IN',1,'2024-11-05 13:26:07',NULL,3,1.00,23),(21,1,'IN',10,'2024-11-05 13:26:27',NULL,2,2.88,23),(22,1,'OUT',1,'2024-11-05 13:26:32',NULL,2,NULL,NULL),(23,3,'IN',2137,'2024-11-05 13:26:51',NULL,2,10.99,20),(24,1,'OUT',1,'2024-11-05 13:27:01',NULL,2,NULL,NULL),(25,5,'IN',1099,'2024-11-05 13:27:28',NULL,1,20.00,23);
+/*!40000 ALTER TABLE `transaction` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `user`
+--
+
+LOCK TABLES `user` WRITE;
+/*!40000 ALTER TABLE `user` DISABLE KEYS */;
+INSERT INTO `user` VALUES (1,'admin123','[\"ROLE_ADMIN\"]','$2y$04$Q55l.HSMruYHOBWtt34EyewE0tiadT6RNNjBk9XJ7TBjbUopMgyTa'),(2,'user123','[]','$2y$04$jKNMZXlOhqPX54xECGeZ3u4Cn2SmbUntUf7.BgOQqlqxjB6n8uDMK'),(3,'user321','[]','$2y$04$w/.KpWQn/b9aXxPPO2JgUue6iA2WkysR2pU1kehLkjeNV53TnMSBm');
+/*!40000 ALTER TABLE `user` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `user_warehouse`
+--
+
+LOCK TABLES `user_warehouse` WRITE;
+/*!40000 ALTER TABLE `user_warehouse` DISABLE KEYS */;
+INSERT INTO `user_warehouse` VALUES (2,1),(2,2),(3,3);
+/*!40000 ALTER TABLE `user_warehouse` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `warehouse`
+--
+
+LOCK TABLES `warehouse` WRITE;
+/*!40000 ALTER TABLE `warehouse` DISABLE KEYS */;
+INSERT INTO `warehouse` VALUES (1,'Magazyn Z6'),(2,'Magazyn Z7'),(3,'MWS');
+/*!40000 ALTER TABLE `warehouse` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2024-11-05 13:29:41
